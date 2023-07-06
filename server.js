@@ -5,7 +5,7 @@ const admin = require('firebase-admin');
 const { v4: uuidv4 } = require('uuid');
 
 // Configurar Firebase
-const serviceAccount = require('./testimonials-a7c1d-firebase-adminsdk-nsfgc-4083bfdf9f.json'); // Reemplaza con la ruta a tu archivo JSON de credenciales de Firebase
+const serviceAccount = require('./.firebaseConfig.json'); // archivo JSON de credenciales de Firebase
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -22,8 +22,6 @@ app.use(bodyParser.json());
 
 
 // Rutas de la API
-
-
 // Ruta para agregar un testimonio
 app.post('/api/crear-testimonio', async (req, res) => {
   try {
@@ -32,7 +30,7 @@ app.post('/api/crear-testimonio', async (req, res) => {
       nombre: req.body.nombre,
       descripcion: req.body.descripcion
     };
-    await db.collection('testimonios-team-a').add(testimonio);
+    await db.collection('testimonios-team-b').add(testimonio);
     res.json({ message: 'Testimonio creado exitosamente.' });
   } catch (error) {
     console.error(error);
@@ -43,7 +41,7 @@ app.post('/api/crear-testimonio', async (req, res) => {
 // Ruta para obtener todos los testimonios
 app.get('/api/obtener-testimonios', async (req, res) => {
   try {
-    const testimoniosSnapshot = await db.collection('testimonios-team-a').get();
+    const testimoniosSnapshot = await db.collection('testimonios-team-b').get();
     const testimonios = testimoniosSnapshot.docs.map(doc => doc.data());
     res.json(testimonios);
   } catch (error) {
@@ -58,7 +56,7 @@ app.put('/api/actualizar-testimonio/:id', async (req, res) => {
     const testimonioId = req.params.id
     const { nombre, descripcion } = req.body
 
-    const testimonioRef = db.collection('testimonios-team-a').where('id', '==', testimonioId);
+    const testimonioRef = db.collection('testimonios-team-b').where('id', '==', testimonioId);
     const testimonioSnapshot = await testimonioRef.get();
 
     if (testimonioSnapshot.empty) {
@@ -79,7 +77,7 @@ app.put('/api/actualizar-testimonio/:id', async (req, res) => {
 app.delete('/api/eliminar-testimonio/:id', async (req, res) => {
   try {
     const testimonioId = req.params.id
-    const testimonioRef = db.collection('testimonios-team-a').where('id', '==', testimonioId);
+    const testimonioRef = db.collection('testimonios-team-b').where('id', '==', testimonioId);
     const testimonioSnapshot = await testimonioRef.get();
 
     if (testimonioSnapshot.empty) {
