@@ -5,7 +5,7 @@ const admin = require('firebase-admin');
 const { v4: uuidv4 } = require('uuid');
 
 // Configurar Firebase
-const serviceAccount = require('./.firebaseConfig.json'); // archivo JSON de credenciales de Firebase
+const serviceAccount = require('./firebaseConfig.json'); // archivo JSON de credenciales de Firebase
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -28,7 +28,8 @@ app.post('/api/crear-testimonio', async (req, res) => {
     const testimonio = {
       id: uuidv4(), // Generar un ID único
       nombre: req.body.nombre,
-      descripcion: req.body.descripcion
+      descripcion: req.body.descripcion,
+      socialUrl: req.body.socialUrl
     };
     await db.collection('testimonios-team-b').add(testimonio);
     res.json({ message: 'Testimonio creado exitosamente.' });
@@ -41,7 +42,7 @@ app.post('/api/crear-testimonio', async (req, res) => {
 // Ruta para obtener todos los testimonios
 app.get('/api/obtener-testimonios', async (req, res) => {
   try {
-    const testimoniosSnapshot = await db.collection('testimonios-team-b').get();
+    const testimoniosSnapshot = await db.collection('testimonios-team-b').orderBy("nombre", "asc").get();
     const testimonios = testimoniosSnapshot.docs.map(doc => doc.data());
     res.json(testimonios);
   } catch (error) {
@@ -54,7 +55,8 @@ app.get('/api/obtener-testimonios', async (req, res) => {
 app.put('/api/actualizar-testimonio/:id', async (req, res) => {
   try {
     const testimonioId = req.params.id
-    const { nombre, descripcion } = req.body
+    // Ups parece que la línea de abajo es muy importante
+    //const { nombre, descripcion, socialUrl } = req.body
 
     const testimonioRef = db.collection('testimonios-team-b').where('id', '==', testimonioId);
     const testimonioSnapshot = await testimonioRef.get();
@@ -64,7 +66,7 @@ app.put('/api/actualizar-testimonio/:id', async (req, res) => {
     } else {
       // Actualizar el testimonio encontrado
       const testimonioDoc = testimonioSnapshot.docs[0];
-      await testimonioDoc.ref.update({ nombre, descripcion });
+      await testimonioDoc.ref.update({ nombre, descripcion, socialUrl });
       res.status(200).send('Testimonio actualizado correctamente');
     }
   } catch (error) {
