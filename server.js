@@ -31,7 +31,7 @@ app.post('/api/crear-testimonio', async (req, res) => {
       descripcion: req.body.descripcion,
       socialUrl: req.body.socialUrl
     };
-    await db.collection('testimonios-team-b').add(testimonio);
+    await db.collection('testimonios-team-b-agosto').add(testimonio);
     res.json({ message: 'Testimonio creado exitosamente.' });
   } catch (error) {
     console.error(error);
@@ -42,7 +42,7 @@ app.post('/api/crear-testimonio', async (req, res) => {
 // Ruta para obtener todos los testimonios
 app.get('/api/obtener-testimonios', async (req, res) => {
   try {
-    const testimoniosSnapshot = await db.collection('testimonios-team-b').orderBy("nombre", "asc").get();
+    const testimoniosSnapshot = await db.collection('testimonios-team-b-agosto').orderBy("nombre", "asc").get();
     const testimonios = testimoniosSnapshot.docs.map(doc => doc.data());
     res.json(testimonios);
   } catch (error) {
@@ -58,7 +58,7 @@ app.put('/api/actualizar-testimonio/:id', async (req, res) => {
     // Ups parece que la línea de abajo es muy importante
     //const { nombre, descripcion, socialUrl } = req.body
 
-    const testimonioRef = db.collection('testimonios-team-b').where('id', '==', testimonioId);
+    const testimonioRef = db.collection('testimonios-team-b-agosto').where('id', '==', testimonioId);
     const testimonioSnapshot = await testimonioRef.get();
 
     if (testimonioSnapshot.empty) {
@@ -79,7 +79,7 @@ app.put('/api/actualizar-testimonio/:id', async (req, res) => {
 app.delete('/api/eliminar-testimonio/:id', async (req, res) => {
   try {
     const testimonioId = req.params.id
-    const testimonioRef = db.collection('testimonios-team-b').where('id', '==', testimonioId);
+    const testimonioRef = db.collection('testimonios-team-b-agosto').where('id', '==', testimonioId);
     const testimonioSnapshot = await testimonioRef.get();
 
     if (testimonioSnapshot.empty) {
