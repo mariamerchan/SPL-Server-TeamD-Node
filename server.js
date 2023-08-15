@@ -56,7 +56,7 @@ app.put('/api/actualizar-testimonio/:id', async (req, res) => {
   try {
     const testimonioId = req.params.id
     // Ups parece que la línea de abajo es muy importante
-    const { nombre, descripcion, socialUrl } = req.body
+    //const { nombre, descripcion, socialUrl } = req.body
 
     const testimonioRef = db.collection('testimonios-team-b').where('id', '==', testimonioId);
     const testimonioSnapshot = await testimonioRef.get();
