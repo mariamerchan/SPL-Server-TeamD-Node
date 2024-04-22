@@ -13,7 +13,7 @@ admin.initializeApp({
 
 // Obtén una instancia de Firestore
 const db = admin.firestore();
-// const testimoniosDb = db.collection()
+// const ofrecimientosDb = db.collection()
 
 // Configurar Express
 const app = express();
@@ -22,83 +22,83 @@ app.use(bodyParser.json());
 
 
 // Rutas de la API
-// Ruta para agregar un testimonio
-app.post('/api/crear-testimonio', async (req, res) => {
+// Ruta para agregar un ofrecimiento
+app.post('/api/crear-ofrecimiento', async (req, res) => {
   try {
-    const testimonio = {
+    const ofrecimiento = {
       id: uuidv4(), // Generar un ID único
       nombre: req.body.nombre,
       descripcion: req.body.descripcion,
       socialUrl: req.body.socialUrl
     };
-    await db.collection('testimonios-team-b-noviembre').add(testimonio);
-    res.json({ message: 'Testimonio creado exitosamente.' });
+    await db.collection('ofrecimientos-team-b-abril-2024').add(ofrecimiento);
+    res.json({ message: 'Ofrecimiento creado exitosamente.' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Ocurrió un error al crear el testimonio.' });
+    res.status(500).json({ error: 'Ocurrió un error al crear el ofrecimiento.' });
   }
 });
 
-// Ruta para obtener todos los testimonios
-app.get('/api/obtener-testimonios', async (req, res) => {
+// Ruta para obtener todos los ofrecimientos
+app.get('/api/obtener-ofrecimientos', async (req, res) => {
   try {
-    const testimoniosSnapshot = await db.collection('testimonios-team-b-noviembre').orderBy("nombre", "asc").get();
-    const testimonios = testimoniosSnapshot.docs.map(doc => doc.data());
-    res.json(testimonios);
+    const ofrecimientosSnapshot = await db.collection('ofrecimientos-team-b-abril-2024').get();
+    const ofrecimientos = ofrecimientosSnapshot.docs.map(doc => doc.data());
+    res.json(ofrecimientos);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Ocurrió un error al obtener los testimonios.' });
+    res.status(500).json({ error: 'Ocurrió un error al obtener los ofrecimientos.' });
   }
 });
 
-// Ruta para actualizar un testimonio
-app.put('/api/actualizar-testimonio/:id', async (req, res) => {
+// Ruta para actualizar un ofrecimiento
+app.put('/api/actualizar-ofrecimiento/:id', async (req, res) => {
   try {
-    const testimonioId = req.params.id
-    // Ups parece que la línea de abajo es muy importante
+    const ofrecimientoId = req.params.id
+    // Ups parece que la línea de abajo esta comentada y es muy importante
     //const { nombre, descripcion, socialUrl } = req.body
 
-    const testimonioRef = db.collection('testimonios-team-b-noviembre').where('id', '==', testimonioId);
-    const testimonioSnapshot = await testimonioRef.get();
+    const ofrecimientoRef = db.collection('ofrecimientos-team-b-abril-2024').where('id', '==', ofrecimientoId);
+    const ofrecimientoSnapshot = await ofrecimientoRef.get();
 
-    if (testimonioSnapshot.empty) {
-      res.status(404).send('No se encontró el testimonio');
+    if (ofrecimientoSnapshot.empty) {
+      res.status(404).send('No se encontró el ofrecimiento');
     } else {
-      // Actualizar el testimonio encontrado
-      const testimonioDoc = testimonioSnapshot.docs[0];
-      await testimonioDoc.ref.update({ nombre, descripcion, socialUrl });
-      res.status(200).send('Testimonio actualizado correctamente');
+      // Actualizar el ofrecimiento encontrado
+      const ofrecimientoDoc = ofrecimientoSnapshot.docs[0];
+      await ofrecimientoDoc.ref.update({ nombre, descripcion, socialUrl });
+      res.status(200).send('Ofrecimiento actualizado correctamente');
     }
   } catch (error) {
     console.error(error)
-    res.status(500).send('Error al actualizar el testimonio')
+    res.status(500).send('Error al actualizar el ofrecimiento')
   }
 });
 
-// Ruta para eliminar un testimonio
-app.delete('/api/eliminar-testimonio/:id', async (req, res) => {
+// Ruta para eliminar un ofrecimiento
+app.delete('/api/eliminar-ofrecimiento/:id', async (req, res) => {
   try {
-    const testimonioId = req.params.id
-    const testimonioRef = db.collection('testimonios-team-b-noviembre').where('id', '==', testimonioId);
-    const testimonioSnapshot = await testimonioRef.get();
+    const ofrecimientoId = req.params.id
+    const ofrecimientoRef = db.collection('ofrecimientos-team-b-abril-2024').where('id', '==', ofrecimientoId);
+    const ofrecimientoSnapshot = await ofrecimientoRef.get();
 
-    if (testimonioSnapshot.empty) {
-      res.status(404).send('No se encontró el testimonio');
+    if (ofrecimientoSnapshot.empty) {
+      res.status(404).send('No se encontró el ofrecimiento');
     } else {
-      // Eliminar el testimonio encontrado
-      const testimonioDoc = testimonioSnapshot.docs[0];
-      await testimonioDoc.ref.delete();
-      res.status(200).json({ message: 'Testimonio eliminado exitosamente' });
+      // Eliminar el ofrecimiento encontrado
+      const ofrecimientoDoc = ofrecimientoSnapshot.docs[0];
+      await ofrecimientoDoc.ref.delete();
+      res.status(200).json({ message: 'Ofrecimiento eliminado exitosamente' });
     }
   } catch (error) {
     console.error(error)
-    res.status(500).json({ error: 'Error al eliminar el testimonio' })
+    res.status(500).json({ error: 'Error al eliminar el ofrecimiento' })
   }
 });
 
 
 // Iniciar servidor
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 app.listen(port, () => {
   console.log(`Servidor iniciado en http://localhost:${port}`);
 });
