@@ -31,7 +31,7 @@ app.post('/api/crear-ofrecimiento', async (req, res) => {
       descripcion: req.body.descripcion,
       socialUrl: req.body.socialUrl
     };
-    await db.collection('ofrecimientos-team-b-abril-2024').add(ofrecimiento);
+    await db.collection('ofrecimientos-team-b-junio-2024').add(ofrecimiento);
     res.json({ message: 'Ofrecimiento creado exitosamente.' });
   } catch (error) {
     console.error(error);
@@ -42,7 +42,7 @@ app.post('/api/crear-ofrecimiento', async (req, res) => {
 // Ruta para obtener todos los ofrecimientos
 app.get('/api/obtener-ofrecimientos', async (req, res) => {
   try {
-    const ofrecimientosSnapshot = await db.collection('ofrecimientos-team-b-abril-2024').get();
+    const ofrecimientosSnapshot = await db.collection('ofrecimientos-team-b-junio-2024').get();
     const ofrecimientos = ofrecimientosSnapshot.docs.map(doc => doc.data());
     res.json(ofrecimientos);
   } catch (error) {
@@ -58,7 +58,7 @@ app.put('/api/actualizar-ofrecimiento/:id', async (req, res) => {
     // Ups parece que la línea de abajo esta comentada y es muy importante
     //const { nombre, descripcion, socialUrl } = req.body
 
-    const ofrecimientoRef = db.collection('ofrecimientos-team-b-abril-2024').where('id', '==', ofrecimientoId);
+    const ofrecimientoRef = db.collection('ofrecimientos-team-b-junio-2024').where('id', '==', ofrecimientoId);
     const ofrecimientoSnapshot = await ofrecimientoRef.get();
 
     if (ofrecimientoSnapshot.empty) {
@@ -79,7 +79,7 @@ app.put('/api/actualizar-ofrecimiento/:id', async (req, res) => {
 app.delete('/api/eliminar-ofrecimiento/:id', async (req, res) => {
   try {
     const ofrecimientoId = req.params.id
-    const ofrecimientoRef = db.collection('ofrecimientos-team-b-abril-2024').where('id', '==', ofrecimientoId);
+    const ofrecimientoRef = db.collection('ofrecimientos-team-b-junio-2024').where('id', '==', ofrecimientoId);
     const ofrecimientoSnapshot = await ofrecimientoRef.get();
 
     if (ofrecimientoSnapshot.empty) {
