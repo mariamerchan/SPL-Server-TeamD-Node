@@ -1,12 +1,14 @@
 const express = require('express');
 const cors = require('cors');
+const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const admin = require('firebase-admin');
 const { v4: uuidv4 } = require('uuid');
 
-// Configurar Firebase
-const serviceAccount = require('./firebaseConfig.json'); // archivo JSON de credenciales de Firebase
+dotenv.config();
 
+// Configurar Firebase
+const serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS);
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
@@ -19,7 +21,6 @@ const db = admin.firestore();
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
-
 
 // Rutas de la API
 // Ruta para agregar un ofrecimiento
